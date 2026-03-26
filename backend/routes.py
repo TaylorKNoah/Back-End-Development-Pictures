@@ -54,7 +54,6 @@ def get_picture_by_id(id):
 @app.route("/picture", methods=["POST"])
 def create_picture():
     req = request.json
-    print(f'post req: {req}')
     if picture_exists(req):
         id = req['id']
         return make_response(jsonify(Message=f'picture with id {id} already present'), 302)
@@ -84,8 +83,11 @@ def update_picture(id: int):
 ######################################################################
 @app.route("/picture/<int:id>", methods=["DELETE"])
 def delete_picture(id):
-    pass
-
+    for i, pic in enumerate(data):
+        if pic['id'] == id:
+            data.pop(i)
+            return make_response("", 204)
+    return make_response(jsonify(Message="Picture not found"), 404)
 
 ######################################################################
 # Helper Methods
